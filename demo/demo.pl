@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # demo.pl --- 
-# Last modify Time-stamp: <Ye Wenbin 2007-09-28 20:26:54>
+# Last modify Time-stamp: <Ye Wenbin 2007-09-29 09:16:47>
 # Version: v 0.0 2007/09/26 13:31:45
 # Author: Ye Wenbin <wenbinye@gmail.com>
 
@@ -218,7 +218,7 @@ sub setup_heading {
     my ($root, $text, $pos) = @_;
     my $x = ($pos%3)*200 + 100;
     my $y = (int($pos/3))*150 + 5;
-    print("$text $pos($x, $y)\n");
+    # print("$text $pos($x, $y)\n");
     my $item = Goo::Canvas::Text->new(
         $root, $text, $x, $y, -1, 'n',
         'font' => 'Sans 12'
@@ -577,7 +577,7 @@ sub setup_images {
 
 sub plant_flower {
     my ($root, $x, $y, $anchor) = @_;
-    my $surface = Cairo::ImageSurface->create_from_png("flower.png");
+    my $surface = Cairo::ImageSurface->create_from_png("$FindBin::Bin/flower.png");
     my $w = $surface->get_width;
     my $h = $surface->get_height;
     my $pattern = Cairo::SurfacePattern->create($surface);
@@ -1506,7 +1506,6 @@ sub create_canvas {
     $frame->show;
     # Create the canvas and board
     $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file("$FindBin::Bin/toroid.png");
-    print "use_image: ", $use_image, "\n";
     if ( $use_image ) {
         $width = $pixbuf->get_width + 3;
         $height = $pixbuf->get_height + 1;

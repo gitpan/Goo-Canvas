@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # scalablity.pl --- 
-# Last modify Time-stamp: <Ye Wenbin 2007-09-28 15:33:26>
+# Last modify Time-stamp: <Ye Wenbin 2007-09-29 09:15:37>
 # Version: v 0.0 2007/09/26 15:32:25
 # Author: Ye Wenbin <wenbinye@gmail.com>
 
@@ -25,7 +25,7 @@ use constant {
     PADDING      => 10,
 };
 use Data::Dumper qw(Dumper); 
-my $use_pixmap = 0;
+my $use_pixmap = shift;
 my $max = 1<<29;
 my ($left_offset, $top_offset, $total_width, $total_height);
 my @ids;
@@ -63,11 +63,16 @@ sub setup_canvas {
     my ($total_items, $id_item_num) = (0, 0);
     $root = $canvas->get_root_item();
     if ( $use_pixmap ) {
-        die "Not support pixmap!";
-        # $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file("toriod.png");
-        # $item_width = $pixbuf->get_width;
-        # $item_height = $pixbuf->get_height;
-        # $pattern = $pixbuf->
+        # my $surface = Cairo::ImageSurface->create_from_png("$Bin/toroid.png");
+        # $item_width = $surface->get_width;
+        # $item_height = $surface->get_height;
+        # $pattern = Goo::Cairo::Pattern->new(
+        #     Cairo::SurfacePattern->create($surface)
+        #     );
+        $pixbuf = Gtk2::Gdk::Pixbuf->new_from_file("$Bin/toroid.png");
+        $item_width = $pixbuf->get_width;
+        $item_height = $pixbuf->get_height;
+        $pattern = Goo::Cairo::Pattern->new_from_pixbuf($pixbuf);
     } else {
         $item_width = 400;
         $item_height = 19;
@@ -106,17 +111,31 @@ sub setup_canvas {
                     my $rx = $ix + $item_width / 2;
                     my $ry = $iy + $item_height / 2;
                     $ids[$id_item_num] = ($x+$ix) . " - " . ($y+$iy);
-                    $item = Goo::Canvas::Rect->new($group, $ix, $iy, $item_width, $item_height);
-                    $item->set_style($styles[($j+1)%2]);
-                    $item->rotate($rotation, $rx, $ry);
+                    if ( $use_pixmap ) {
+                        # use Data::Dumper qw(Dumper); 
+                        # print Dumper($pattern, $item_width), "\n";
+                        $item = Goo::Canvas::Image->new(
+                            $group, undef, $ix, $iy,
+                            'pattern' => $pattern,
+                            'width' => $item_width,
+                            'height' => $item_height
+                        );
+                        $item->rotate($rotation, $rx, $ry);
+                    } else {
+                        $item = Goo::Canvas::Rect->new($group, $ix, $iy, $item_width, $item_height);
+                        $item->set_style($styles[($j+1)%2]);
+                        $item->rotate($rotation, $rx, $ry);
+                    }
                     $item->{"id"} = $ids[$id_item_num];
                     $item->signal_connect('motion-notify-event',
                                           \&on_motion_notify);
-                    $item = Goo::Canvas::Text->new($group,
-                                                   $ids[$id_item_num],
-                                                   $ix+$item_width/2, $iy+$item_height/2,
-                                                   -1, 'center',
-                                                   "font" => 'Sans 8');
+                    $item = Goo::Canvas::Text->new(
+                        $group,
+                        $ids[$id_item_num],
+                        $ix+$item_width/2, $iy+$item_height/2,
+                        -1, 'center',
+                        "font" => 'Sans 8'
+                    );
                     $item->rotate($rotation, $rx, $ry);
                     $id_item_num++;
                     $total_items+=2;

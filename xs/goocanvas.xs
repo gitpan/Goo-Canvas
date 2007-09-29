@@ -270,6 +270,10 @@ goo_canvas_create_path(commands, cr)
     GArray *commands
     cairo_t *cr
 
+cairo_surface_t*
+goo_canvas_cairo_surface_from_pixbuf(pixbuf)
+    GdkPixbuf* pixbuf
+
 BOOT:
 #include "register.xsh"
 #include "boot.xsh"
@@ -325,10 +329,18 @@ GooCairoPattern_copy*
 new(class, pattern)
   cairo_pattern_t* pattern
   CODE:
-    RETVAL = (GooCairoPattern*)pattern;
+    RETVAL = pattern;
   OUTPUT:
     RETVAL
-    
+
+GooCairoPattern_copy*
+new_from_pixbuf(class, pixbuf)
+    GdkPixbuf *pixbuf
+   CODE:
+    RETVAL = goo_canvas_cairo_pattern_from_pixbuf(pixbuf);
+   OUTPUT:
+    RETVAL
+
 MODULE = Goo::Canvas		PACKAGE = Goo::Cairo::Matrix
 
 GooCairoMatrix_copy*
@@ -338,4 +350,3 @@ new(class, mat)
     RETVAL = (GooCairoMatrix*)mat;
   OUTPUT:
     RETVAL
-  

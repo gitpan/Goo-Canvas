@@ -10,12 +10,8 @@
 #include "goocanvas.h"
 
 /* FIXME: How to avoid compile error in autogen.h */
-typedef struct _GooCairoPattern GooCairoPattern;
-struct _GooCairoPattern {
-};
-typedef struct _GooCairoMatrix GooCairoMatrix;
-struct _GooCairoMatrix {
-};
+#define GooCairoPattern cairo_pattern_t
+#define GooCairoMatrix cairo_matrix_t
 
 #include "goocanvas-perl-version.h"
 #include "goocanvas-perl-autogen.h"

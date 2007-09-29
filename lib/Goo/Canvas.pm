@@ -26,7 +26,7 @@ our @EXPORT = qw(
 	
 );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 require XSLoader;
 XSLoader::load('Goo::Canvas', $VERSION);
@@ -38,45 +38,73 @@ push @ISA, 'Gtk2::Container';
 
 1;
 __END__
-# Below is stub documentation for your module. You'd better edit it!
+# documents.
 
 =head1 NAME
 
-Goo::Canvas - Perl extension for blah blah blah
+Goo::Canvas - Perl interface to the GooCanvas
 
 =head1 SYNOPSIS
 
-  use Goo::Canvas;
-  blah blah blah
+    use Goo::Canvas;
+    use Gtk2 '-init';
+    use Glib qw(TRUE FALSE);
+
+    my $window = Gtk2::Window->new('toplevel');
+    $window->signal_connect('delete_event' => sub { Gtk2->main_quit; });
+    $window->set_default_size(640, 600);
+
+    my $swin = Gtk2::ScrolledWindow->new;
+    $swin->set_shadow_type('in');
+    $window->add($swin);
+
+    my $canvas = Goo::Canvas->new();
+    $canvas->set_size_request(600, 450);
+    $canvas->set_bounds(0, 0, 1000, 1000);
+    $swin->add($canvas);
+
+    my $root = $canvas->get_root_item();
+    my $rect = Goo::Canvas::Rect->new(
+        $root, 100, 100, 400, 400,
+        'line-width' => 10,
+        'radius-x' => 20,
+        'radius-y' => 10,
+        'stroke-color' => 'yellow',
+        'fill-color' => 'red'
+    );
+    $rect->signal_connect('button-press-event',
+                          \&on_rect_button_press);
+
+    my $text = Goo::Canvas::Text->new(
+        $root, "Hello World", 300, 300, -1, 'center',
+        'font' => 'Sans 24',
+    );
+    $text->rotate(45, 300, 300);
+    $window->show_all();
+    Gtk2->main;
+
+    sub on_rect_button_press {
+        print "Rect item pressed!\n";
+        return TRUE;
+    }
 
 =head1 DESCRIPTION
 
-Stub documentation for Goo::Canvas, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
+GTK+ does't has an buildin canvas widget. GooCanvas is wonderful. It
+is easy to use and has powerful and extensible way to create items in
+canvas. Just try it.
 
-Blah blah blah.
-
-=head2 EXPORT
-
-None by default.
-
-
+For more documents, please read GooCanvas Manual and the demo programs
+provided in the source distribution in both perl-Goo::Canvas and
+GooCanvas.
 
 =head1 SEE ALSO
 
-Mention other useful documentation such as the documentation of
-related modules or operating system documentation (such as man pages
-in UNIX), or any relevant external documentation such as RFCs or
-standards.
-
-If you have a mailing list set up for your module, mention it here.
-
-If you have a web site set up for your module, mention it here.
+L<Gtk2>(3pm)
 
 =head1 AUTHOR
 
-ywb, E<lt>ywb@E<gt>
+Ye Wenbin E<lt>wenbinye@gmail.comE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
