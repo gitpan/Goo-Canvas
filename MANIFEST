@@ -1,11 +1,3 @@
-build/boot.xsh
-build/doc.pl
-build/goocanvas-perl-autogen.h
-build/goocanvas-perl-version.h
-build/goocanvas-perl.typemap
-build/IFiles.pm
-build/podindex
-build/register.xsh
 Changes
 demo/demo.pl
 demo/flower.png

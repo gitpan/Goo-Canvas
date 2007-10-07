@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # demo.pl --- 
-# Last modify Time-stamp: <Ye Wenbin 2007-09-29 09:16:47>
+# Last modify Time-stamp: <Ye Wenbin 2007-10-07 21:47:50>
 # Version: v 0.0 2007/09/26 13:31:45
 # Author: Ye Wenbin <wenbinye@gmail.com>
 
@@ -273,15 +273,17 @@ sub setup_rectangles {
     setup_item_signals($item);
 }
 
-# FIXME: Why the cairo_pattern is changed?
 sub create_stipple {
+    our @stipples;
     my($color_name, $stipple_data) = @_;
     my $color = Gtk2::Gdk::Color->parse($color_name);
     $stipple_data->[2] = $stipple_data->[14] = $color->red >> 8;
     $stipple_data->[1] = $stipple_data->[13] = $color->green >> 8;
     $stipple_data->[0] = $stipple_data->[12] = $color->blue >> 8;
+    my $stipple_str = join('', map {chr} @$stipple_data);
+    push @stipples, \$stipple_str; # make $stipple_str refcnt increase
     my $surface = Cairo::ImageSurface->create_for_data(
-        join('', map {chr} @$stipple_data), 'argb32',
+        $stipple_str, 'argb32',
         2, 2, 8
     );
     my $pattern = Cairo::SurfacePattern->create($surface);
