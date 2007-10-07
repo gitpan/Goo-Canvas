@@ -1,7 +1,8 @@
-Goo-Canvas version 0.03
+Goo-Canvas version 0.04
 =======================
 
-Perl bindings to the goocanvas-0.6.
+Perl bindings to the goocanvas-0.9. For goocanvas-0.6, please use
+Goo-Canvas version 0.03.
 
 INSTALLATION
 
@@ -20,7 +21,8 @@ This module requires these other modules and libraries:
   Cairo >= 1.00 (perl module and requisite C libraries)
   Glib >= 1.103 (perl module and requisite C libraries)
   Gtk2 >= 1.100 (perl module and requisite C libraries)
-  goocanvas-0.6
+  goocanvas-0.9
+
 
 COPYRIGHT AND LICENCE
 

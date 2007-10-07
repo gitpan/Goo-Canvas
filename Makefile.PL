@@ -13,7 +13,7 @@ our %build_reqs = (
 	'perl-Glib'               => '1.103',
 	'perl-Gtk2'               => '1.100',
 	'perl-Cairo'              => '1.00',
-	'goocanvas'           => '0.6',
+	'goocanvas'           => '0.9',
 );
 
 our %prereqs = (

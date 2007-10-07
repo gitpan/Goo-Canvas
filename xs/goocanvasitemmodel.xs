@@ -64,9 +64,22 @@ goo_canvas_item_model_lower(item, ...)
     else
        goo_canvas_item_model_lower(item, SvGooCanvasItemModel (ST(1)));
 
-cairo_matrix_t*
-goo_canvas_item_model_get_transform(model)
-    GooCanvasItemModel *model
+
+void
+goo_canvas_item_model_get_transform(item)
+    GooCanvasItemModel *item
+   PREINIT:
+    gboolean ret;
+    cairo_matrix_t *transform;
+   PPCODE:
+    ret = goo_canvas_item_model_get_transform(item, transform);
+    if ( ret ) {
+        ST(0) = newSVCairoMatrix (transform);
+        sv_2mortal(ST(0));
+    }
+    else {
+        XSRETURN_UNDEF;
+    }
 
 void
 goo_canvas_item_model_set_transform(model, matrix)

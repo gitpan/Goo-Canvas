@@ -88,9 +88,21 @@ goo_canvas_item_lower(item, ...)
     else
        goo_canvas_item_lower(item, SvGooCanvasItem (ST(1)));
 
-cairo_matrix_t*
+void
 goo_canvas_item_get_transform(item)
     GooCanvasItem *item
+   PREINIT:
+    gboolean ret;
+    cairo_matrix_t *transform;
+   PPCODE:
+    ret = goo_canvas_item_get_transform(item, transform);
+    if ( ret ) {
+        ST(0) = newSVCairoMatrix (transform);
+        sv_2mortal(ST(0));
+    }
+    else {
+        XSRETURN_UNDEF;
+    }
 
 void
 goo_canvas_item_set_transform(item, matrix)
@@ -201,15 +213,28 @@ goo_canvas_item_get_bounds(item)
     OUTPUT:
      RETVAL
 
-GooCanvasItem*
-goo_canvas_item_get_item_at(item, x, y, cr, is_pointer_event, parent_is_visible)
+AV*
+goo_canvas_item_get_items_at(item, x, y, cr, is_pointer_event, parent_is_visible)
     GooCanvasItem *item
     gdouble x
     gdouble y
     cairo_t *cr
     gboolean is_pointer_event
     gboolean parent_is_visible
-
+  PREINIT:
+    GList *list, *i;
+  CODE:
+    list = goo_canvas_item_get_items_at(item, x, y, cr, is_pointer_event, parent_is_visible, NULL);
+    RETVAL = newAV();
+    for ( i = list; i != NULL; i = i->next ) {
+        av_push(RETVAL, newSVGooCanvasItem((GooCanvasItem*)i->data));
+    }
+    sv_2mortal((SV*)RETVAL);
+  OUTPUT:
+    RETVAL
+  CLEANUP:
+    g_list_free (list);
+    
 gboolean
 goo_canvas_item_is_visible(item)
     GooCanvasItem *item
