@@ -183,18 +183,32 @@ void
 goo_canvas_item_ensure_updated(item)
     GooCanvasItem *item
 
-void
-goo_canvas_item_update(item, entire_tree, cr, bounds)
+GooCanvasBounds *
+goo_canvas_item_update(item, entire_tree, cr)
     GooCanvasItem *item
     gboolean entire_tree
     cairo_t *cr
-    GooCanvasBounds *bounds
+   CODE:
+    Newx(RETVAL, 1, GooCanvasBounds);
+    goo_canvas_item_update(item, entire_tree, cr, RETVAL);
+   OUTPUT:
+    RETVAL
 
-gboolean
-goo_canvas_item_get_requested_area(item, cr, requested_area)
+GooCanvasBounds *
+goo_canvas_item_get_requested_area(item, cr)
     GooCanvasItem *item
     cairo_t *cr
-    GooCanvasBounds *requested_area
+   PREINIT:
+    gboolean ret;
+   CODE:
+    Newx(RETVAL, 1, GooCanvasBounds);
+    ret = goo_canvas_item_get_requested_area(item, cr, RETVAL);
+    if ( !ret ) {
+        Safefree(RETVAL);
+        RETVAL = NULL;
+    }
+   OUTPUT:
+    RETVAL
 
 void
 goo_canvas_item_allocate_area(item, cr, requested_area, allocated_area, x_offset, y_offset)
@@ -205,14 +219,15 @@ goo_canvas_item_allocate_area(item, cr, requested_area, allocated_area, x_offset
     gdouble x_offset
     gdouble y_offset
 
-GooCanvasBounds *
+GooCanvasBounds*
 goo_canvas_item_get_bounds(item)
     GooCanvasItem *item
-    CODE:
-     goo_canvas_item_get_bounds(item, RETVAL);
-    OUTPUT:
-     RETVAL
-
+   CODE:
+    Newx(RETVAL, 1, GooCanvasBounds);
+    goo_canvas_item_get_bounds(item, RETVAL);
+   OUTPUT:
+    RETVAL
+    
 AV*
 goo_canvas_item_get_items_at(item, x, y, cr, is_pointer_event, parent_is_visible)
     GooCanvasItem *item

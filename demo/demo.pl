@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # demo.pl --- 
-# Last modify Time-stamp: <Ye Wenbin 2007-10-07 21:47:50>
+# Last modify Time-stamp: <Ye Wenbin 2007-11-02 03:25:30>
 # Version: v 0.0 2007/09/26 13:31:45
 # Author: Ye Wenbin <wenbinye@gmail.com>
 
@@ -1406,7 +1406,7 @@ sub create_canvas {
     $canvas = Goo::Canvas->new;
     $root = $canvas->get_root_item;
     $canvas->set_size_request( 400, 200);
-    $canvas->set_bounds( 0, 0, 300, 200);
+    $canvas->set_bounds( 0, 0, 400, 200);
     $frame->add($canvas);
     $canvas->show;
     # First parent and box

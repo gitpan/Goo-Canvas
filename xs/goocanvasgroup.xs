@@ -7,7 +7,7 @@ goo_canvas_group_new(class, ...)
    PREINIT:
     GooCanvasItem *parent;
    CODE:
-    if (items == 1)
+    if ( items == 1 || !sv_true(ST(1)) )
         RETVAL = goo_canvas_group_new(NULL, NULL);
     else {
         parent = SvGooCanvasItem (ST(1));
@@ -24,7 +24,7 @@ goo_canvas_group_model_new(class, ...)
    PREINIT:
     GooCanvasItemModel *parent;
    CODE:
-    if (items == 1)
+    if ( items == 1 || !sv_true(ST(1)) )
         RETVAL = goo_canvas_group_model_new(NULL, NULL);
     else {
         parent = SvGooCanvasItemModel (ST(1));

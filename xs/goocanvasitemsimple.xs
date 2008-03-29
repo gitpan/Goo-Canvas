@@ -11,6 +11,7 @@ goo_canvas_item_simple_get_path_bounds(item, cr)
     GooCanvasItemSimple *item
     cairo_t *cr
    CODE:
+    Newx(RETVAL, 1, GooCanvasBounds);
     goo_canvas_item_simple_get_path_bounds(item, cr, RETVAL);
    OUTPUT:
     RETVAL
@@ -20,6 +21,7 @@ goo_canvas_item_simple_user_bounds_to_device(item, cr)
     GooCanvasItemSimple *item
     cairo_t *cr
    CODE:
+    Newx(RETVAL, 1, GooCanvasBounds);
     goo_canvas_item_simple_user_bounds_to_device(item, cr, RETVAL);
    OUTPUT:
     RETVAL
@@ -29,6 +31,7 @@ goo_canvas_item_simple_user_bounds_to_parent(item, cr)
     GooCanvasItemSimple *item
     cairo_t *cr
    CODE:
+    Newx(RETVAL, 1, GooCanvasBounds);
     goo_canvas_item_simple_user_bounds_to_parent(item, cr, RETVAL);
    OUTPUT:
     RETVAL

@@ -57,13 +57,8 @@ y2 (self, ...)
     OUTPUT:
      RETVAL
 
-=for apidoc
-Delete the bounds if necessary. Usually the bounds is create to pass
-to another C function or fetch from an GtkObject. So you may never
-use this function. Just in case you need it.
-=cut
 void
-del(self)
+DESTROY(self)
     GooCanvasBounds* self
     CODE:
     Safefree(self);

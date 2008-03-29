@@ -1,3 +1,5 @@
+bin/perlmine.pl
+bin/perltetris.pl
 Changes
 demo/demo.pl
 demo/flower.png
@@ -10,10 +12,9 @@ demo/toroid.png
 demo/unit-demo.pl
 goocanvas-perl.h
 goocanvas.typemap
-goocanvasbounds.h
 lib/Goo/Canvas.pm
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 maps
 ppport.h
 README

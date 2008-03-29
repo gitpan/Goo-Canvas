@@ -9,3 +9,8 @@ Revision history for Perl extension Goo::Canvas.
 
 0.04  Sun Oct  7 22:36:28 2007
     - Bindings for goocanvas-0.9
+
+0.05  Sun Nov  4 14:25:34 2007
+    - Fix get_bounds error
+    - Add bin/perltetris.pl
+    - Add bin/perlmine.pl
