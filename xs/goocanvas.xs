@@ -6,20 +6,20 @@ MODULE = Goo::Canvas		PACKAGE = Goo::Canvas   PREFIX = goo_canvas_
     use Goo::Canvas;
     use Gtk2 '-init';
     use Glib qw(TRUE FALSE);
-    
+
     my $window = Gtk2::Window->new('toplevel');
     $window->signal_connect('delete_event' => sub { Gtk2->main_quit; });
     $window->set_default_size(640, 600);
-    
+
     my $swin = Gtk2::ScrolledWindow->new;
     $swin->set_shadow_type('in');
     $window->add($swin);
-    
+
     my $canvas = Goo::Canvas->new();
     $canvas->set_size_request(600, 450);
     $canvas->set_bounds(0, 0, 1000, 1000);
     $swin->add($canvas);
-    
+
     my $root = $canvas->get_root_item();
     my $rect = Goo::Canvas::Rect->new(
         $root, 100, 100, 400, 400,
@@ -31,7 +31,7 @@ MODULE = Goo::Canvas		PACKAGE = Goo::Canvas   PREFIX = goo_canvas_
     );
     $rect->signal_connect('button-press-event',
                           \&on_rect_button_press);
-    
+
     my $text = Goo::Canvas::Text->new(
         $root, "Hello World", 300, 300, -1, 'center',
         'font' => 'Sans 24',
@@ -39,7 +39,7 @@ MODULE = Goo::Canvas		PACKAGE = Goo::Canvas   PREFIX = goo_canvas_
     $text->rotate(45, 300, 300);
     $window->show_all();
     Gtk2->main;
-    
+
     sub on_rect_button_press {
         print "Rect item pressed!\n";
         return TRUE;
@@ -47,8 +47,8 @@ MODULE = Goo::Canvas		PACKAGE = Goo::Canvas   PREFIX = goo_canvas_
 
 =head1 DESCRIPTION
 
-GTK+ does't has an buildin canvas widget. GooCanvas is wonderful.
-It is easy to use and has powerful and extensible way to create items
+GTK+ doesn't has an built-in canvas widget. GooCanvas is wonderful.
+It is easy to use and has powerful and extensible methods to create items
 in canvas. Just try it.
 
 For more documents, please read GooCanvas Manual and the demo programs
@@ -56,7 +56,7 @@ provided in the source distribution in both perl-Goo::Canvas and
 GooCanvas.
 
 =cut
-    
+
 GtkWidget*
 goo_canvas_new(class)
     C_ARGS:
@@ -123,6 +123,47 @@ goo_canvas_get_item_at(canvas, x, y, is_pointer_event)
     gdouble x
     gdouble y
     gboolean is_pointer_event
+
+AV*
+goo_canvas_get_items_at(canvas, x, y, is_pointer_event)
+    GooCanvas *canvas
+    gdouble x
+    gdouble y
+    gboolean is_pointer_event
+  PREINIT:
+    GList *list, *i;
+  CODE:
+    list = goo_canvas_get_items_at(canvas, x, y, is_pointer_event);
+    RETVAL = newAV();
+    for ( i = list; i != NULL; i = i->next ) {
+        av_push(RETVAL, newSVGooCanvasItem((GooCanvasItem*)i->data));
+    }
+    sv_2mortal((SV*)RETVAL);
+  OUTPUT:
+    RETVAL
+  CLEANUP:
+    g_list_free (list);
+
+AV*
+goo_canvas_get_items_in_area(canvas, area, inside_area, allow_overlaps, include_containers)
+    GooCanvas *canvas
+    GooCanvasBounds *area
+    gboolean inside_area
+    gboolean allow_overlaps
+    gboolean include_containers
+  PREINIT:
+    GList *list, *i;
+  CODE:
+    list = goo_canvas_get_items_in_area(canvas, area, inside_area, allow_overlaps, include_containers);
+    RETVAL = newAV();
+    for ( i = list; i != NULL; i = i->next ) {
+        av_push(RETVAL, newSVGooCanvasItem((GooCanvasItem*)i->data));
+    }
+    sv_2mortal((SV*)RETVAL);
+  OUTPUT:
+    RETVAL
+  CLEANUP:
+    g_list_free (list);
 
 void
 goo_canvas_scroll_to(canvas, left, top)

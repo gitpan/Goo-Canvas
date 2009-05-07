@@ -14,3 +14,8 @@ Revision history for Perl extension Goo::Canvas.
     - Fix get_bounds error
     - Add bin/perltetris.pl
     - Add bin/perlmine.pl
+
+0.06  Wed, 06 May 2009 22:00:39 -0400
+    - Add Goo:Canvas::get_items_at and Goo::Canvas::get_items_in_area.
+    Thanks to Jeffrey Ratcliffe!
+
